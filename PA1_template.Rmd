@@ -1,25 +1,107 @@
 ---
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
+title: "PA1_template.Rmd"
+author: "James Thomson"
+date: "September 29, 2017"
+output: html_document
 ---
+# Loading the data
 
+```{r}
+data <- read.csv("C:/Users/jthomson/Documents/activity.csv")
+```
 
-## Loading and preprocessing the data
+# What is mean total number of steps taken per day?
 
+```{r}
+stepsdate <- aggregate(steps ~ date, data, sum, na.rm = TRUE)
+```
 
+#### Mean and median number of steps taken each day:
 
-## What is mean total number of steps taken per day?
+```{r}
+mean(stepsdate$steps)
+median(stepsdate$steps)
+```
 
+#### Histogram of the total number of steps taken each day
 
+```{r}
+plot(stepsdate$steps,
+        type = "h",
+        main = "Total Number of Steps Taken Each Day",
+        xlab = "Date", 
+        ylab = "Steps",
+        col = "red")
+```
 
-## What is the average daily activity pattern?
+# What is the average daily activity pattern?
 
+```{r}
+stepsint <- aggregate(steps ~ interval, data, mean, na.rm = TRUE)
 
+plot(stepsint,
+        type = "l",
+        main = "Average Daily Activity Pattern",
+        xlab = "Interval (5-minute)",
+        ylab = "Average Number of Steps",
+        col = "red")
+```
 
-## Imputing missing values
+#### The 5-minute interval that, on average, contains the maximum number of steps
 
+```{r}
+stepsint$interval[which.max(stepsint$steps)]
+```
 
+# Imputing missing values
 
-## Are there differences in activity patterns between weekdays and weekends?
+#### Count of missing (NA) data
+
+```{r}
+sum(is.na(data))
+```
+
+#### Replace missing data with 0
+```{r}
+imputed.data <- data
+imputed.data$steps[is.na(imputed.data$steps)] <- 0
+```
+
+#### Mean and median number of steps taken each day:
+
+```{r}
+mean(imputed.data$steps)
+median(imputed.data$steps)
+```
+
+#### Histogram of the total number of steps taken each day
+
+```{r}
+plot(imputed.data$steps, 
+        type = "h",
+        main = "Total Number of Steps Taken Each Day",
+        xlab = "Date", 
+        ylab = "Steps",
+        col = "red") 
+```
+
+# Are there differences in activity patterns between weekdays and weekends?
+
+#### Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
+
+```{r}
+weekdays <- c("Monday", "Tuesday", "Wednesday", "Thursday", 
+              "Friday")
+imputed.data$day <- as.factor(ifelse(is.element(weekdays(as.Date(imputed.data$date)),weekdays), "Weekday", "Weekend"))
+
+steps.interval <- aggregate(steps ~ interval + day, imputed.data, mean)
+
+library(lattice)
+
+xyplot(steps.interval$steps ~ steps.interval$interval|steps.interval$day,
+        type="l",
+        main="Total Number of Steps Taken Each Day",
+        xlab="Interval (5-minute)", 
+        ylab="Steps",
+        col = "red",
+        layout=c(1,2))
