@@ -3,7 +3,7 @@ title: "PA1_template.Rmd"
 author: "James Thomson"
 date: "September 29, 2017"
 output:
-  md_document: default
+  html_document: default
   ---
 # Loading the data
 
