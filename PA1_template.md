@@ -27,7 +27,7 @@ What is mean total number of steps taken per day?
             ylab = "Steps",
             col = "red")
 
-![](PA1_template_files/figure-markdown_strict/unnamed-chunk-4-1.png)
+![](figure/total_number_of_steps_taken_each_day.png)
 
 What is the average daily activity pattern?
 ===========================================
@@ -41,7 +41,7 @@ What is the average daily activity pattern?
             ylab = "Average Number of Steps",
             col = "red")
 
-![](PA1_template_files/figure-markdown_strict/unnamed-chunk-5-1.png)
+![](figure/average_daily_activity_pattern.png)
 
 #### The 5-minute interval that, on average, contains the maximum number of steps
 
@@ -84,7 +84,7 @@ Imputing missing values
             ylab = "Steps",
             col = "red") 
 
-![](PA1_template_files/figure-markdown_strict/unnamed-chunk-10-1.png)
+![](figure/total_number_of_steps_taken_each_day_2.png)
 
 Are there differences in activity patterns between weekdays and weekends?
 =========================================================================
@@ -107,4 +107,4 @@ Are there differences in activity patterns between weekdays and weekends?
             col = "red",
             layout=c(1,2))
 
-![](PA1_template_files/figure-markdown_strict/unnamed-chunk-11-1.png)
+![](figure/total_number_of_steps_taken_each_day_3.png)
