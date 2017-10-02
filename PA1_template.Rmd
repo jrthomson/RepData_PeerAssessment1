@@ -61,17 +61,19 @@ stepsint$interval[which.max(stepsint$steps)]
 sum(is.na(data))
 ```
 
-#### Replace missing data with 0
+#### Replace missing data with the mean
 ```{r}
+library(imputeTS)
 imputed.data <- data
-imputed.data$steps[is.na(imputed.data$steps)] <- 0
+imputed.data <- na.mean(imputed.data)
+imputed.data.stepsdate <- aggregate(steps ~ date, imputed.data, sum)
 ```
 
 #### Mean and median number of steps taken each day:
 
 ```{r}
-mean(imputed.data$steps)
-median(imputed.data$steps)
+mean(imputed.data.stepsdate$steps)
+median(imputed.data.stepsdate$steps)
 ```
 
 #### Histogram of the total number of steps taken each day
@@ -90,8 +92,8 @@ plot(imputed.data$steps,
 #### Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
 
 ```{r}
-weekdays <- c("Monday", "Tuesday", "Wednesday", "Thursday", 
-              "Friday")
+weekdays <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+
 imputed.data$day <- as.factor(ifelse(is.element(weekdays(as.Date(imputed.data$date)),weekdays), "Weekday", "Weekend"))
 
 steps.interval <- aggregate(steps ~ interval + day, imputed.data, mean)
@@ -105,3 +107,4 @@ xyplot(steps.interval$steps ~ steps.interval$interval|steps.interval$day,
         ylab="Steps",
         col = "red",
         layout=c(1,2))
+```
